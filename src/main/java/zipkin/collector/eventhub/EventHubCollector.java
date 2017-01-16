@@ -5,10 +5,6 @@ package zipkin.collector.eventhub;
 
 
 import com.microsoft.azure.eventprocessorhost.EventProcessorHost;
-import com.microsoft.azure.eventprocessorhost.IEventProcessor;
-import com.microsoft.azure.eventprocessorhost.IEventProcessorFactory;
-import com.microsoft.azure.eventprocessorhost.PartitionContext;
-import zipkin.Component;
 import zipkin.collector.*;
 import zipkin.storage.StorageComponent;
 
@@ -116,7 +112,7 @@ public class EventHubCollector implements CollectorComponent {
     public CollectorComponent start() {
         try {
             host.registerEventProcessorFactory(
-                    context -> new ZipkinEventProcess(builder)
+                    context -> new ZipkinEventProcessor(builder)
             );
             started = true;
         } catch (Exception e) {

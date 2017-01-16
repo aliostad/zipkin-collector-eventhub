@@ -11,13 +11,13 @@ import java.util.Collections;
 
 import static zipkin.storage.Callback.NOOP;
 
-public class ZipkinEventProcess implements IEventProcessor {
+public class ZipkinEventProcessor implements IEventProcessor {
 
     int checkpointBatchingCount = 0;
     EventHubCollector.Builder config;
     Collector collector;
 
-    public ZipkinEventProcess(EventHubCollector.Builder builder){
+    public ZipkinEventProcessor(EventHubCollector.Builder builder){
         config = builder;
         collector = config.delegate.build();
     }
@@ -50,7 +50,7 @@ public class ZipkinEventProcess implements IEventProcessor {
             this.checkpointBatchingCount++;
             if ((checkpointBatchingCount % config.checkpointBatchSize) == 0)
             {
-                System.out.println("SAMPLE: Partition " + context.getPartitionId() + " checkpointing at " +
+                System.out.println("Partition " + context.getPartitionId() + " checkpointing at " +
                         data.getSystemProperties().getOffset() + "," + data.getSystemProperties().getSequenceNumber());
                 context.checkpoint(data);
             }
