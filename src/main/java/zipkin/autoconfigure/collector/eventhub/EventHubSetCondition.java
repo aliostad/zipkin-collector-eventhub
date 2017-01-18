@@ -9,7 +9,7 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
  * Created by aliostad on 16/01/2017.
  */
 public final class EventHubSetCondition extends SpringBootCondition {
-    static final String PROPERTY_NAME = "zipkin.collector.eventhub";
+    static final String PROPERTY_NAME = "zipkin.collector.eventhub.eventHubConnectionString";
 
     public ConditionOutcome getMatchOutcome(ConditionContext context, AnnotatedTypeMetadata a) {
         String eventHubProperty = context.getEnvironment().getProperty(PROPERTY_NAME);

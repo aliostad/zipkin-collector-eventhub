@@ -20,11 +20,7 @@ public class EventHubCollector implements CollectorComponent {
     private Exception lastException;
 
     public EventHubCollector(Builder builder){
-        builder = builder;
-        host = new EventProcessorHost(builder.processorHostName,
-                builder.eventHubName, builder.consumerGroupName,
-                builder.eventHubConnectionString, builder.storageConnectionString,
-                builder.storageContainerName, builder.storageBlobPrefix);
+        this.builder = builder;
     }
 
     public static Builder builder() {
@@ -38,7 +34,7 @@ public class EventHubCollector implements CollectorComponent {
         String consumerGroupName = "$Default";
         String eventHubConnectionString;
         String storageConnectionString;
-        String storageContainerName;
+        String storageContainerName = "zipkin";
         int checkpointBatchSize = 10;
 
         String processorHostName = UUID.randomUUID().toString();
@@ -49,68 +45,105 @@ public class EventHubCollector implements CollectorComponent {
 
         }
 
-        public CollectorComponent.Builder eventHubName(String name) {
+        public EventHubCollector.Builder eventHubName(String name) {
             eventHubName = name;
             return this;
         }
 
-        public CollectorComponent.Builder consumerGroupName(String name) {
+        public EventHubCollector.Builder consumerGroupName(String name) {
             consumerGroupName = name;
             return this;
         }
 
-        public CollectorComponent.Builder checkpointBatchSize(int size) {
+        public EventHubCollector.Builder checkpointBatchSize(int size) {
             checkpointBatchSize = size;
             return this;
         }
 
-        public CollectorComponent.Builder eventHubConnectionString(String connectionString) {
+        public EventHubCollector.Builder eventHubConnectionString(String connectionString) {
             eventHubConnectionString = connectionString;
             return this;
         }
 
-        public CollectorComponent.Builder storageConnectionString(String connectionString) {
+        public EventHubCollector.Builder storageConnectionString(String connectionString) {
             storageConnectionString = connectionString;
             return this;
         }
 
-        public CollectorComponent.Builder storageContainerName(String containerName) {
+        public EventHubCollector.Builder storageContainerName(String containerName) {
             storageContainerName = containerName;
             return this;
         }
 
-        public CollectorComponent.Builder storageBlobPrefix(String blobPrefix) {
+        public EventHubCollector.Builder storageBlobPrefix(String blobPrefix) {
             storageBlobPrefix = blobPrefix;
             return this;
         }
 
-        public CollectorComponent.Builder processorHostName(String nameForThisProcessorHost) {
+        public EventHubCollector.Builder processorHostName(String nameForThisProcessorHost) {
             processorHostName = nameForThisProcessorHost;
             return this;
         }
 
-        public CollectorComponent.Builder storage(StorageComponent storage) {
+        public EventHubCollector.Builder storage(StorageComponent storage) {
             delegate.storage(storage);
             return this;
         }
 
-        public CollectorComponent.Builder metrics(CollectorMetrics metrics) {
+        public EventHubCollector.Builder metrics(CollectorMetrics metrics) {
             delegate.metrics(metrics);
             return this;
         }
 
-        public CollectorComponent.Builder sampler(CollectorSampler sampler) {
+        public EventHubCollector.Builder sampler(CollectorSampler sampler) {
             delegate.sampler(sampler);
             return this;
         }
 
-        public CollectorComponent build() {
+        public EventHubCollector build() {
             return new EventHubCollector(this);
         }
     }
 
+    public String getEventHubName() {
+        return builder.eventHubName;
+    }
+
+    public String getConsumerGroupName() {
+        return builder.consumerGroupName;
+    }
+
+    public String getEventHubConnectionString() {
+        return builder.eventHubConnectionString;
+    }
+
+    public String getStorageConnectionString() {
+        return builder.storageConnectionString;
+    }
+
+    public String getStorageContainerName() {
+        return builder.storageContainerName;
+    }
+
+    public int getCheckpointBatchSize() {
+        return builder.checkpointBatchSize;
+    }
+
+    public String getProcessorHostName() {
+        return builder.processorHostName;
+    }
+
+    public String getStorageBlobPrefix() {
+        return builder.storageBlobPrefix;
+    }
+
     public CollectorComponent start() {
         try {
+            host = new EventProcessorHost(builder.processorHostName,
+                    builder.eventHubName, builder.consumerGroupName,
+                    builder.eventHubConnectionString, builder.storageConnectionString,
+                    builder.storageContainerName, builder.storageBlobPrefix);
+
             host.registerEventProcessorFactory(
                     context -> new ZipkinEventProcessor(builder)
             );
@@ -128,7 +161,9 @@ public class EventHubCollector implements CollectorComponent {
 
     public void close() throws IOException {
         try {
-            host.unregisterEventProcessor();
+            if(host != null) {
+                host.unregisterEventProcessor();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             lastException = e;

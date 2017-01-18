@@ -85,7 +85,38 @@ public class EventHubCollectorProperties {
     }
 
     public EventHubCollector.Builder toBuilder() {
-        EventHubCollector.builder()
-                .
+        EventHubCollector.Builder builder = EventHubCollector.builder()
+                .eventHubConnectionString(eventHubConnectionString)
+                .storageConnectionString(storageConnectionString);
+
+        if (notEmpty(storageBlobPrefix)) {
+            builder = builder.storageBlobPrefix(storageBlobPrefix);
+        }
+
+        if(notEmpty(processorHostName)) {
+            builder = builder.processorHostName(processorHostName);
+        }
+
+        if(checkpointBatchSize > 0) {
+            builder = builder.checkpointBatchSize(checkpointBatchSize);
+        }
+
+        if(notEmpty(consumerGroupName)) {
+            builder = builder.consumerGroupName(consumerGroupName);
+        }
+
+        if(notEmpty(eventHubName)) {
+            builder = builder.eventHubName(eventHubName);
+        }
+
+        if(notEmpty(storageContainerName)) {
+            builder = builder.storageContainerName(storageContainerName);
+        }
+
+        return builder;
+    }
+
+    private static boolean notEmpty(String s){
+        return !(s == null || s.isEmpty());
     }
 }
