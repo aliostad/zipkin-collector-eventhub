@@ -39,7 +39,8 @@ public class ZipkinEventProcessor implements IEventProcessor {
             byte[] bytes = data.getBody();
             if (bytes[0] == '[') {
                 collector.acceptSpans(bytes, Codec.JSON, NOOP);
-            } else {
+            }
+            else {
                 if (bytes[0] == 12 /* TType.STRUCT */) {
                     collector.acceptSpans(bytes, Codec.THRIFT, NOOP);
                 } else {
