@@ -21,7 +21,7 @@ import static org.springframework.boot.test.util.EnvironmentTestUtils.addEnviron
 /**
  * Created by aliostad on 16/01/2017.
  */
-public class EventHubCollectorAutoConfigurationTests {
+public class EventHubCollectorAutoConfigurationTest {
 
     AnnotationConfigApplicationContext context;
 
@@ -52,8 +52,8 @@ public class EventHubCollectorAutoConfigurationTests {
     @Test
     public void provideCollectorComponent_whenEventHubConnectionStringIsSet() {
         context = new AnnotationConfigApplicationContext();
-        addEnvironment(context, "zipkin.collector.eventhub.storageConnectionString:" + dummyEventHubConnectionString);
-        addEnvironment(context, "zipkin.collector.eventhub.eventHubConnectionString:" + dummyStorageConnectionString );
+        addEnvironment(context, "zipkin.collector.eventhub.storageConnectionString:" + dummyStorageConnectionString);
+        addEnvironment(context, "zipkin.collector.eventhub.eventHubConnectionString:" + dummyEventHubConnectionString );
         context.register(PropertyPlaceholderAutoConfiguration.class,
                 EventHubCollectorAutoConfiguration.class,
                 InMemoryConfiguration.class);

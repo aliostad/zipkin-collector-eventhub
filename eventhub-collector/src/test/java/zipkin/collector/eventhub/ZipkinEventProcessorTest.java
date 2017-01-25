@@ -9,7 +9,7 @@ import zipkin.storage.InMemoryStorage;
 /**
  * Created by aliostad on 18/01/2017.
  */
-public class ZipkinEventProcessorTests {
+public class ZipkinEventProcessorTest {
 
     @Test
     public void canCreateZipkinEventProcessor(){
