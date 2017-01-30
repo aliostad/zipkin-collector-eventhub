@@ -17,17 +17,21 @@ import zipkin.storage.StorageComponent;
 @Conditional(EventHubSetCondition.class)
 public class EventHubCollectorAutoConfiguration {
 
-    @Bean
-    EventHubCollector eventHubCollector(EventHubCollectorProperties properties,
-                                        CollectorSampler sampler,
-                                        CollectorMetrics metrics,
-                                        StorageComponent storage){
+  @Bean
+  EventHubCollector eventHubCollector(EventHubCollectorProperties properties,
+                                      CollectorSampler sampler,
+                                      CollectorMetrics metrics,
+                                      StorageComponent storage) {
 
-        return properties.toBuilder()
-                .sampler(sampler)
-                .storage(storage)
-                .metrics(metrics)
-                .build();
-    }
+
+    System.out.println("===========EventHubCollectorAutoConfiguration==============");
+
+    return properties.toBuilder()
+        .sampler(sampler)
+        .storage(storage)
+        .metrics(metrics)
+        .build()
+        .start();
+  }
 }
 

@@ -21,5 +21,4 @@ public class ZipkinEventProcessorTest {
                 .storage(new InMemoryStorage());
 
     }
-
 }
