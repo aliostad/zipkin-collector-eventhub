@@ -10,6 +10,8 @@ import zipkin.storage.StorageComponent;
 
 import java.io.IOException;
 import java.util.UUID;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 
 public class EventHubCollector implements CollectorComponent {
@@ -19,10 +21,11 @@ public class EventHubCollector implements CollectorComponent {
   private Boolean started = false;
   private Exception lastException;
 
+  private static final Logger logger = Logger.getLogger(EventHubCollector.class.getName());
+
   public EventHubCollector(Builder builder) {
     this.builder = builder;
-    System.out.println("_____EventHubCollector_ctor_____");
-
+    logger.log(Level.INFO,"_____EventHubCollector_ctor_____");
   }
 
   public static Builder builder() {
@@ -140,8 +143,18 @@ public class EventHubCollector implements CollectorComponent {
   }
 
   public EventHubCollector start() {
-    System.out.println("_____EventHubCollector_start______");
+
+    logger.log(Level.INFO,"_____EventHubCollector_start______");
     try {
+
+      logger.log(Level.INFO, "processorHostName: " + builder.processorHostName);
+      logger.log(Level.INFO, "consumerGroupName: " + builder.consumerGroupName);
+      logger.log(Level.INFO, "eventHubName: " + builder.eventHubName);
+      logger.log(Level.INFO, "eventHubConnectionString: " + builder.eventHubConnectionString);
+      logger.log(Level.INFO, "storageConnectionString: " + builder.storageConnectionString);
+      logger.log(Level.INFO, "storageContainerName: " + builder.storageContainerName);
+      logger.log(Level.INFO, "storageBlobPrefix: " + builder.storageBlobPrefix);
+
       host = new EventProcessorHost(builder.processorHostName,
           builder.eventHubName, builder.consumerGroupName,
           builder.eventHubConnectionString, builder.storageConnectionString,
@@ -154,7 +167,8 @@ public class EventHubCollector implements CollectorComponent {
     } catch (Exception e) {
       e.printStackTrace();
       lastException = e;
-      System.out.println("_____EventHubCollector_exception_start____");
+
+      logger.log(Level.WARNING,"_____EventHubCollector_exception____");
       System.out.println(e);
 
     }
@@ -162,14 +176,13 @@ public class EventHubCollector implements CollectorComponent {
   }
 
   public CheckResult check() {
-    System.out.println("_____EventHubCollector_check____--");
-
+    logger.log(Level.INFO,"_____EventHubCollector_check____");
     return started || lastException == null ? CheckResult.OK : CheckResult.failed(lastException);
   }
 
   public void close() throws IOException {
     try {
-      System.out.println("_____EventHubCollector_close_____");
+      logger.log(Level.INFO,"_____EventHubCollector_close_____");
       if (host != null) {
         host.unregisterEventProcessor();
       }

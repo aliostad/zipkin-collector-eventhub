@@ -6,7 +6,7 @@
 
   <groupId>io.zipkin.azure</groupId>
   <artifactId>zipkin-azure</artifactId>
-  <version>0.1-SNAPSHOT</version>
+  <version>0.1.0-SNAPSHOT</version>
   <modules>
     <module>eventhub-collector</module>
     <module>eventhub-autoconfig</module>
