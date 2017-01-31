@@ -39,8 +39,8 @@ zipkin.collector.eventhub.processorHostName=<name of the processor host, default
 zipkin.collector.eventhub.storageBlobPrefix=<the path within container where blobs are created for partition lease, processorHostName>
 ```
 
-Now run the server along with the collector (assuming current directory is where `zipkin.jar` and `application.properties` are):
-
+### 5- Rrun the server along with the collector
+Assuming `zipkin.jar` and `application.properties` are in the current working directory
 ```
 java -Dloader.path=/where/jar/was/unpackaged -cp zipkin.jar org.springframework.boot.loader.PropertiesLauncher --spring.config.location=application.properties --zipkin.collector.eventhub.eventHubConnectionString="<eventhub connection string, make sure quoted otherwise won't work>"
 ```
